@@ -13,8 +13,8 @@ using namespace at;
 
 namespace {
 
-struct TestCPUGenerator : public Generator {
-  TestCPUGenerator(uint64_t value) : Generator{Device(DeviceType::CPU), DispatchKeySet(DispatchKey::CustomRNGKeyId)}, value_(value) { }
+struct TestCPUGenerator : public GeneratorImpl {
+  TestCPUGenerator(uint64_t value) : GeneratorImpl{Device(DeviceType::CPU), DispatchKeySet(DispatchKey::CustomRNGKeyId)}, value_(value) { }
   ~TestCPUGenerator() = default;
   uint32_t random() { return value_; }
   uint64_t random64() { return value_; }
@@ -26,20 +26,20 @@ struct TestCPUGenerator : public Generator {
   uint64_t value_;
 };
 
-Tensor& random_(Tensor& self, Generator* generator) {
-  return at::native::templates::random_impl<native::templates::cpu::RandomKernel, TestCPUGenerator>(self, generator);
+Tensor& random_(Tensor& self, Generator generator) {
+  return at::native::templates::random_impl<native::templates::cpu::RandomKernel, TestCPUGenerator*>(self, generator);
 }
 
-Tensor& random_from_to(Tensor& self, int64_t from, optional<int64_t> to, Generator* generator) {
-  return at::native::templates::random_from_to_impl<native::templates::cpu::RandomFromToKernel, TestCPUGenerator>(self, from, to, generator);
+Tensor& random_from_to(Tensor& self, int64_t from, optional<int64_t> to, Generator generator) {
+  return at::native::templates::random_from_to_impl<native::templates::cpu::RandomFromToKernel, TestCPUGenerator*>(self, from, to, generator);
 }
 
-Tensor& random_to(Tensor& self, int64_t to, Generator* generator) {
+Tensor& random_to(Tensor& self, int64_t to, Generator generator) {
   return random_from_to(self, 0, to, generator);
 }
 
-Tensor& custom_rng_cauchy_(Tensor& self, double median, double sigma, Generator * generator) {
-  auto gen = (TestCPUGenerator*)generator;
+Tensor& custom_rng_cauchy_(Tensor& self, double median, double sigma, Generator generator) {
+  auto gen = (TestCPUGenerator*)(generator.get());
   auto iter = TensorIterator::nullary_op(self);
   native::templates::cpu::cauchy_kernel(iter, median, sigma, gen);
   return self;
@@ -91,7 +91,7 @@ TEST_F(RNGTest, Random) {
 // This test proves that Tensor.random_() distribution is able to generate unsigned 64 bit max value(64 ones)
 // https://github.com/pytorch/pytorch/issues/33299
 TEST_F(RNGTest, Random64bits) {
-  auto gen = new TestCPUGenerator(std::numeric_limits<uint64_t>::max());
+  auto gen = std::make_shared<TestCPUGenerator>(std::numeric_limits<uint64_t>::max());
   auto actual = torch::empty({1}, torch::kInt64);
   actual.random_(std::numeric_limits<int64_t>::min(), c10::nullopt, gen);
   ASSERT_EQ(static_cast<uint64_t>(actual[0].item<int64_t>()), std::numeric_limits<uint64_t>::max());
@@ -100,14 +100,14 @@ TEST_F(RNGTest, Random64bits) {
 TEST_F(RNGTest, Cauchy) {
   const auto median = 123.45;
   const auto sigma = 67.89;
-  auto gen = new TestCPUGenerator(42.0);
+  auto gen = std::make_shared<TestCPUGenerator>(42.0);
 
   auto actual = torch::empty({3, 3});
   actual.cauchy_(median, sigma, gen);
 
   auto expected = torch::empty_like(actual);
   auto iter = TensorIterator::nullary_op(expected);
-  native::templates::cpu::cauchy_kernel(iter, median, sigma, gen);
+  native::templates::cpu::cauchy_kernel(iter, median, sigma, gen.get());
 
   ASSERT_TRUE(torch::allclose(actual, expected));
 }

@@ -160,7 +160,7 @@ TEST(CUDAGenerator, TestPhiloxEngineIndex) {
 TEST(CUDAGenerator, TestGeneratorDynamicCast) {
   //  Test Description: Check dynamic cast for CUDA
   if (!at::cuda::is_available()) return;
-  std::shared_ptr<Generator> foo = at::cuda::detail::createCUDAGenerator();
+  std::shared_ptr<GeneratorImpl> foo = at::cuda::detail::createCUDAGenerator();
   auto result = dynamic_cast<at::CUDAGenerator*>(foo.get());
   ASSERT_EQ(typeid(at::CUDAGenerator*).hash_code(), typeid(result).hash_code());
 }
@@ -238,7 +238,7 @@ TEST(CUDAGenerator, TestRNGForking) {
   auto target_value = at::randn({1000}, at::kCUDA);
   // Dramatically alter the internal state of the main generator
   auto x = at::randn({100000}, at::kCUDA);
-  auto forked_value = at::randn({1000}, current_gen.get(), at::kCUDA);
+  auto forked_value = at::randn({1000}, current_gen, at::kCUDA);
   ASSERT_EQ(target_value.sum().item<double>(), forked_value.sum().item<double>());
 }
 

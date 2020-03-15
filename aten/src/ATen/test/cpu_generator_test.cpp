@@ -12,7 +12,7 @@ using namespace at;
 
 TEST(CPUGenerator, TestGeneratorDynamicCast) {
   // Test Description: Check dynamic cast for CPU
-  std::shared_ptr<Generator> foo = at::detail::createCPUGenerator();
+  std::shared_ptr<GeneratorImpl> foo = at::detail::createCPUGenerator();
   auto result = dynamic_cast<CPUGenerator*>(foo.get());
   ASSERT_EQ(typeid(CPUGenerator*).hash_code(), typeid(result).hash_code());
 }
@@ -116,7 +116,7 @@ TEST(CPUGenerator, TestRNGForking) {
   auto target_value = at::randn({1000});
   // Dramatically alter the internal state of the main generator
   auto x = at::randn({100000});
-  auto forked_value = at::randn({1000}, current_gen.get());
+  auto forked_value = at::randn({1000}, current_gen);
   ASSERT_EQ(target_value.sum().item<double>(), forked_value.sum().item<double>());
 }
 
