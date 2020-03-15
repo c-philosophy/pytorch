@@ -928,17 +928,16 @@ def fractional_max_pool2d_test(test_case):
         return dict(
             constructor=lambda: nn.FractionalMaxPool2d(
                 2, output_ratio=0.5, _random_samples=random_samples),
-        cpp_constructor_args='torch::nn::FractionalMaxPool2dOptions(
-                2, output_ratio=0.5, _random_samples=random_samples)',
+            cpp_constructor_args='torch::nn::FractionalMaxPool2dOptions(2, output_ratio=0.5, _random_samples=random_samples)',
             input_size=(1, 3, 5, 7),
-        cpp_input_args=['torch::randn({1, 3, 5, 7})'],
+            cpp_input_args=['torch::randn({1, 3, 5, 7})'],
             fullname='FractionalMaxPool2d_ratio')
     elif test_case == 'size':
         return dict(
             constructor=lambda: nn.FractionalMaxPool2d((2, 3), output_size=(
                 4, 3), _random_samples=random_samples),
             input_size=(1, 3, 7, 6),
-        cpp_input_args=['torch::randn({1, 3, 7, 6})'],
+            cpp_input_args=['torch::randn({1, 3, 7, 6})'],
             fullname='FractionalMaxPool2d_size')
 
 
@@ -948,24 +947,23 @@ def fractional_max_pool3d_test(test_case):
         return dict(
             constructor=lambda: nn.FractionalMaxPool3d(
                 2, output_ratio=0.5, _random_samples=random_samples),
-        cpp_constructor_args='torch::nn::FractionalMaxPool3dOptions(
-                2, output_ratio=0.5, _random_samples=random_samples)',
+            cpp_constructor_args='torch::nn::FractionalMaxPool3dOptions(2, output_ratio=0.5, _random_samples=random_samples)',
             input_size=(2, 4, 5, 5, 5),
-        cpp_input_args=['torch::randn({2, 4, 5, 5, 5})'],
+            cpp_input_args=['torch::randn({2, 4, 5, 5, 5})'],
             fullname='FractionalMaxPool3d_ratio')
     elif test_case == 'size':
         return dict(
             constructor=lambda: nn.FractionalMaxPool3d((2, 2, 2), output_size=(
                 4, 4, 4), _random_samples=random_samples),
             input_size=(2, 4, 7, 7, 7),
-        cpp_input_args=['torch::randn({2, 4, 7, 7, 7})'],
+            cpp_input_args=['torch::randn({2, 4, 7, 7, 7})'],
             fullname='FractionalMaxPool3d_size')
     elif test_case == 'asymsize':
         return dict(
             constructor=lambda: nn.FractionalMaxPool3d((4, 2, 3), output_size=(
                 10, 3, 2), _random_samples=random_samples),
             input_size=(2, 4, 16, 7, 5),
-        cpp_input_args=['torch::randn({2, 4, 16, 7, 5})'],
+            cpp_input_args=['torch::randn({2, 4, 16, 7, 5})'],
             fullname='FractionalMaxPool3d_asymsize')
 
 
@@ -1743,6 +1741,7 @@ new_module_tests = [
         constructor_args=(1.5, 2),
         cpp_constructor_args='torch::nn::LPPool2dOptions(1.5, 2)',
         input_fn=lambda: torch.rand(1, 3, 7, 7),
+        cpp_input_args=['torch::rand({1, 3, 7, 7})'],
         desc='norm',
     ),
     dict(
@@ -1750,6 +1749,7 @@ new_module_tests = [
         constructor_args=(1.5, 2),
         cpp_constructor_args='torch::nn::LPPool1dOptions(1.5, 2)',
         input_fn=lambda: torch.rand(1, 3, 7),
+        cpp_input_args=['torch::rand({1, 3, 7})'],
         desc='norm',
     ),
     dict(
@@ -2079,6 +2079,7 @@ new_module_tests = [
         constructor_args=(4, 3),
         cpp_constructor_args='torch::nn::EmbeddingOptions(4, 3)',
         input_fn=lambda: torch.empty(2, 3, dtype=torch.long).random_(4),
+        cpp_input_args=['torch::empty({2, 3}, torch::kLong).random_(4)'],
         jacobian_input=False,
         check_gradgrad=False,
     ),
@@ -2087,6 +2088,7 @@ new_module_tests = [
         constructor_args=(4, 3),
         cpp_constructor_args='torch::nn::EmbeddingBagOptions(4, 3)',
         input_fn=lambda: torch.empty(2, 3, dtype=torch.long).random_(4),
+        cpp_input_args=['torch::empty({2, 3}, torch::kLong).random_(4)'],
         jacobian_input=False,
         check_gradgrad=False,
         desc='mean',
@@ -2096,6 +2098,7 @@ new_module_tests = [
         constructor_args=(4, 3, None, 2., False, 'sum'),
         cpp_constructor_args='torch::nn::EmbeddingBagOptions(4, 3).max_norm(c10::nullopt).norm_type(2.).scale_grad_by_freq(false).mode(torch::kSum)',
         input_fn=lambda: torch.empty(2, 3, dtype=torch.long).random_(4),
+        cpp_input_args=['torch::empty({2, 3}, torch::kLong).random_(4)'],
         jacobian_input=False,
         check_gradgrad=False,
         desc='sum',
@@ -2105,6 +2108,7 @@ new_module_tests = [
         constructor_args=(4, 3, None, 2., False, 'max'),
         cpp_constructor_args='torch::nn::EmbeddingBagOptions(4, 3).max_norm(c10::nullopt).norm_type(2.).scale_grad_by_freq(false).mode(torch::kMax)',
         input_fn=lambda: torch.empty(2, 3, dtype=torch.long).random_(4),
+        cpp_input_args=['torch::empty({2, 3}, torch::kLong).random_(4)'],
         jacobian_input=False,
         check_gradgrad=False,
         desc='max',
@@ -2114,6 +2118,7 @@ new_module_tests = [
         constructor=lambda: nn.EmbeddingBag(4, 3, sparse=True),
         cpp_constructor_args='torch::nn::EmbeddingBagOptions(4, 3).sparse(true)',
         input_fn=lambda: torch.randperm(2).repeat(1, 2),
+        cpp_input_args=['torch::randperm(2).repeat({1, 2})'],
         jacobian_input=False,
         check_gradgrad=False,
     ),
@@ -2121,6 +2126,7 @@ new_module_tests = [
         constructor=lambda: nn.Embedding(4, 3, sparse=True),
         cpp_constructor_args='torch::nn::EmbeddingOptions(4, 3).sparse(true)',
         input_fn=lambda: torch.randperm(2).repeat(1, 2),
+        cpp_input_args=['torch::randperm(2).repeat({1, 2})'],
         jacobian_input=False,
         fullname='Embedding_sparse',
         check_gradgrad=False,
@@ -2439,12 +2445,14 @@ new_module_tests = [
         constructor_args=(3,),
         cpp_constructor_args='torch::nn::AdaptiveMaxPool1dOptions(3)',
         input_fn=lambda: _rand_tensor_non_equal(1, 3, 5),
+        cpp_input_args=['_rand_tensor_non_equal({1, 3, 5})'],
     ),
     dict(
         module_name='AdaptiveMaxPool2d',
         constructor_args=(3,),
         cpp_constructor_args='torch::nn::AdaptiveMaxPool2dOptions(3)',
         input_fn=lambda: _rand_tensor_non_equal(1, 3, 5, 6),
+        cpp_input_args=['_rand_tensor_non_equal({1, 3, 5, 6})'],
         desc='single',
     ),
     dict(
@@ -2452,13 +2460,15 @@ new_module_tests = [
         constructor_args=((3, 4),),
         cpp_constructor_args='torch::nn::AdaptiveMaxPool2dOptions({3, 4})',
         input_fn=lambda: _rand_tensor_non_equal(1, 3, 5, 6),
+        cpp_input_args=['_rand_tensor_non_equal({1, 3, 5, 6})'],
         desc='tuple',
     ),
     dict(
         module_name='AdaptiveMaxPool2d',
         constructor_args=((3, None),),
-        cpp_constructor_args='torch::nn::AdaptiveMaxPool2dOptions({3, 4})',
+        cpp_constructor_args='torch::nn::AdaptiveMaxPool2dOptions({3, c10::nullopt})',
         input_fn=lambda: _rand_tensor_non_equal(1, 3, 5, 6),
+        cpp_input_args=['_rand_tensor_non_equal({1, 3, 5, 6})'],
         desc='tuple_none',
     ),
     dict(
@@ -2466,18 +2476,23 @@ new_module_tests = [
         constructor_args=(3,),
         cpp_constructor_args='torch::nn::AdaptiveMaxPool3dOptions(3)',
         input_fn=lambda: _rand_tensor_non_equal(2, 3, 5, 6, 7),
+        cpp_input_args=['_rand_tensor_non_equal({2, 3, 5, 6, 7})'],
         desc='single',
     ),
     dict(
         module_name='AdaptiveMaxPool3d',
         constructor_args=((3, 4, 5),),
+        cpp_constructor_args='torch::nn::AdaptiveMaxPool3dOptions({3, 4, 5})',
         input_fn=lambda: _rand_tensor_non_equal(2, 3, 5, 6, 7),
+        cpp_input_args=['_rand_tensor_non_equal({2, 3, 5, 6, 7})'],
         desc='tuple',
     ),
     dict(
         module_name='AdaptiveMaxPool3d',
         constructor_args=((3, None, 5),),
+        cpp_constructor_args='torch::nn::AdaptiveMaxPool3dOptions({3, c10::nullopt, 5})',
         input_fn=lambda: _rand_tensor_non_equal(2, 3, 5, 6, 7),
+        cpp_input_args=['_rand_tensor_non_equal({2, 3, 5, 6, 7})'],
         desc='tuple_none',
     ),
     dict(
@@ -2485,12 +2500,15 @@ new_module_tests = [
         constructor_args=(3,),
         cpp_constructor_args='torch::nn::AdaptiveMaxPool3dOptions(3)',
         input_fn=lambda: _rand_tensor_non_equal(2, 3, 12, 9, 3),
+        cpp_input_args=['_rand_tensor_non_equal({2, 3, 12, 9, 3})'],
         desc='single_nonatomic',
     ),
     dict(
         module_name='AdaptiveMaxPool3d',
         constructor_args=((3, 4, 5),),
+        cpp_constructor_args='torch::nn::AdaptiveMaxPool3dOptions({3, 4, 5})',
         input_fn=lambda: _rand_tensor_non_equal(2, 3, 6, 4, 10),
+        cpp_input_args=['_rand_tensor_non_equal({2, 3, 6, 4, 10})'],
         desc='tuple_nonatomic',
     ),
     dict(
@@ -2498,12 +2516,14 @@ new_module_tests = [
         constructor_args=(3,),
         cpp_constructor_args='torch::nn::AdaptiveAvgPool1dOptions(3)',
         input_fn=lambda: torch.rand(1, 3, 5),
+        cpp_input_args=['torch::rand({1, 3, 5})'],
     ),
     dict(
         module_name='AdaptiveAvgPool1d',
         constructor_args=(1,),
         cpp_constructor_args='torch::nn::AdaptiveAvgPool1dOptions(1)',
         input_fn=lambda: torch.rand(1, 3, 5),
+        cpp_input_args=['torch::rand({1, 3, 5})'],
         desc='one_output',
     ),
     dict(
@@ -2511,6 +2531,7 @@ new_module_tests = [
         constructor_args=(3,),
         cpp_constructor_args='torch::nn::AdaptiveAvgPool2dOptions(3)',
         input_fn=lambda: torch.rand(1, 3, 5, 6),
+        cpp_input_args=['torch::rand({1, 3, 5, 6})'],
         desc='single',
     ),
     dict(
@@ -2518,18 +2539,23 @@ new_module_tests = [
         constructor_args=(1,),
         cpp_constructor_args='torch::nn::AdaptiveAvgPool2dOptions(1)',
         input_fn=lambda: torch.rand(1, 3, 5, 6),
+        cpp_input_args=['torch::rand({1, 3, 5, 6})'],
         desc='single_1x1output',
     ),
     dict(
         module_name='AdaptiveAvgPool2d',
         constructor_args=((3, 4),),
+        cpp_constructor_args='torch::nn::AdaptiveAvgPool2dOptions({3, 4})',
         input_fn=lambda: torch.rand(1, 3, 5, 6),
+        cpp_input_args=['torch::rand({1, 3, 5, 6})'],
         desc='tuple',
     ),
     dict(
         module_name='AdaptiveAvgPool2d',
         constructor_args=((3, None),),
+        cpp_constructor_args='torch::nn::AdaptiveAvgPool2dOptions({3, c10::nullopt})',
         input_fn=lambda: torch.rand(1, 3, 5, 6),
+        cpp_input_args=['torch::rand({1, 3, 5, 6})'],
         desc='tuple_none',
     ),
     dict(
@@ -2537,18 +2563,23 @@ new_module_tests = [
         constructor_args=(3,),
         cpp_constructor_args='torch::nn::AdaptiveAvgPool3dOptions(3)',
         input_fn=lambda: torch.rand(2, 3, 5, 2, 7),
+        cpp_input_args=['torch::rand({2, 3, 5, 2, 7})'],
         desc='single',
     ),
     dict(
         module_name='AdaptiveAvgPool3d',
         constructor_args=((3, 4, 5),),
+        cpp_constructor_args='torch::nn::AdaptiveAvgPool3dOptions({3, 4, 5})',
         input_fn=lambda: torch.rand(2, 3, 5, 3, 7),
+        cpp_input_args=['torch::rand({2, 3, 5, 2, 7})'],
         desc='tuple',
     ),
     dict(
         module_name='AdaptiveAvgPool3d',
         constructor_args=((None, 4, 5),),
+        cpp_constructor_args='torch::nn::AdaptiveAvgPool3dOptions({c10::nullopt, 4, 5})',
         input_fn=lambda: torch.rand(2, 3, 5, 3, 7),
+        cpp_input_args=['torch::rand({2, 3, 5, 2, 7})'],
         desc='tuple_none',
     ),
     dict(
@@ -2568,6 +2599,7 @@ new_module_tests = [
         input_size=(3, 2, 5),
         cpp_input_args=['torch::randn({3, 2, 5})'],
         constructor_args=(2.,),
+        cpp_constructor_args='torch::nn::CELUOptions(2.)',
         check_inplace=True,
         reference_fn=lambda x, *_: torch.where(x >= 0, x, 2. * ((.5 * x).exp() - 1)),
     ),
@@ -2575,6 +2607,7 @@ new_module_tests = [
         module_name='CELU',
         input_size=(),
         constructor_args=(2.,),
+        cpp_constructor_args='torch::nn::CELUOptions(2.)',
         check_inplace=True,
         reference_fn=lambda x, *_: torch.where(x >= 0, x, 2. * ((.5 * x).exp() - 1)),
         desc='scalar'
@@ -2703,7 +2736,7 @@ new_module_tests = [
     dict(
         fullname='Unfold',
         constructor=lambda: nn.Unfold((2, 2), (1, 1), (0, 0), (1, 1)),
-        cpp_constructor_args='torch::nn::UnfoldOptions((2, 2), (1, 1), (0, 0), (1, 1))',
+        cpp_constructor_args='torch::nn::UnfoldOptions({2, 2}).dilation({1, 1}).padding({0, 0}).stride({1, 1})',
         input_size=(2, 4, 3, 3),
         cpp_input_args=['torch::randn({2, 4, 3, 3})'],
         check_gradgrad=False,
@@ -2721,7 +2754,7 @@ new_module_tests = [
     dict(
         fullname='Unfold_int_input',
         constructor=lambda: nn.Unfold(2, 1, 0, 1),
-        cpp_constructor_args='torch::nn::UnfoldOptions(2, 1, 0, 1)',
+        cpp_constructor_args='torch::nn::UnfoldOptions(2).dilation(1).padding(0).stride(1)',
         input_size=(2, 4, 3, 3),
         cpp_input_args=['torch::randn({2, 4, 3, 3})'],
         check_gradgrad=False,
@@ -2760,7 +2793,7 @@ new_module_tests = [
     dict(
         module_name='RReLU',
         constructor_args=(0.1, 0.9),
-        cpp_constructor_args='torch::nn::RReLUOptions(0.1, 0.9)',
+        cpp_constructor_args='torch::nn::RReLUOptions().lower(0.1).upper(0.9)',
         input_size=(),
         desc='with_up_down_scalar',
         test_cuda=False,
@@ -3304,7 +3337,6 @@ loss_reference_fns = {
 criterion_tests = [
     dict(
         module_name='L1Loss',
-        cpp_constructor_args='',
         input_size=(2, 3, 4),
         cpp_input_args=['torch::randn({2, 3, 4})'],
         target_size=(2, 3, 4),
@@ -3314,6 +3346,7 @@ criterion_tests = [
     dict(
         module_name='NLLLoss',
         input_fn=lambda: torch.rand(15, 10).log(),
+        cpp_input_args=['torch::rand({15, 10}).log()'],
         target_fn=lambda: torch.Tensor(15).uniform_().mul(10).floor().long(),
         reference_fn=lambda i, t, m:
             nllloss_reference(i, t, reduction=get_reduction(m)),
@@ -3323,8 +3356,9 @@ criterion_tests = [
     dict(
         module_name='NLLLoss',
         constructor_args=(None, None, 2),
-        cpp_constructor_args='torch::nn::NLLLossOptions(None, None, 2)',
+        cpp_constructor_args='torch::nn::NLLLossOptions().weight({}).ignore_index(2)',
         input_fn=lambda: torch.rand(15, 10).log(),
+        cpp_input_args=['torch::rand({15, 10}).log()'],
         target_fn=lambda: torch.Tensor(15).uniform_().mul(10).floor().long(),
         reference_fn=lambda i, t, _: nllloss_reference(i, t, ignore_index=2),
         desc='ignore_index',
@@ -3333,7 +3367,9 @@ criterion_tests = [
     dict(
         module_name='NLLLoss',
         constructor_args_fn=lambda: (torch.rand(10),),
+        cpp_constructor_args='torch::nn::NLLLossOptions().weight(torch::rand(10))',
         input_fn=lambda: torch.rand(15, 10).add(1e-2).log(),
+        cpp_input_args=['torch::rand({15, 10}).add(1e-2).log()'],
         target_fn=lambda: torch.Tensor(15).uniform_().mul(10).floor().long(),
         reference_fn=lambda i, t, m:
             nllloss_reference(i, t, weight=get_weight(m)),
@@ -3343,7 +3379,9 @@ criterion_tests = [
     dict(
         module_name='NLLLoss',
         constructor_args_fn=lambda: (torch.rand(10), None, 2),
+        cpp_constructor_args='torch::nn::NLLLossOptions().weight(torch::rand(10)).ignore_index(2)',
         input_fn=lambda: torch.rand(15, 10).add(1e-2).log(),
+        cpp_input_args=['torch::rand({15, 10}).add(1e-2).log()'],
         target_fn=lambda: torch.Tensor(15).uniform_().mul(10).floor().long(),
         reference_fn=lambda i, t, m:
             nllloss_reference(i, t, weight=get_weight(m), ignore_index=2),
@@ -3353,7 +3391,9 @@ criterion_tests = [
     dict(
         module_name='NLLLoss',
         constructor_args_fn=lambda: (torch.rand(10), None, -1),
+        cpp_constructor_args='torch::nn::NLLLossOptions().weight(torch::rand(10)).ignore_index(-1)',
         input_fn=lambda: torch.rand(15, 10).add(1e-2).log(),
+        cpp_input_args=['torch::rand({15, 10}).add(1e-2).log()'],
         target_fn=lambda: torch.Tensor(15).uniform_().mul(10 + 1).floor().long() - 1,
         reference_fn=lambda i, t, m:
             nllloss_reference(i, t, weight=get_weight(m), ignore_index=-1),
@@ -3363,6 +3403,7 @@ criterion_tests = [
     dict(
         module_name='KLDivLoss',
         input_fn=lambda: torch.rand(10, 10).log(),
+        cpp_input_args=['torch::rand({10, 10}).log()'],
         target_fn=lambda: torch.rand(10, 10),
         reference_fn=lambda i, t, m:
             kldivloss_reference(i, t, get_reduction(m)),
@@ -3380,6 +3421,7 @@ criterion_tests = [
     dict(
         module_name='BCELoss',
         input_fn=lambda: torch.rand(15, 10).clamp_(1e-2, 1 - 1e-2),
+        cpp_input_args=['torch::rand({15, 10}).clamp_(1e-2, 1 - 1e-2)'],
         target_fn=lambda: torch.randn(15, 10).gt(0).double(),
         reference_fn=lambda i, t, m: -(t * i.log() + (1 - t) * (1 - i).log()).sum() /
             (i.numel() if get_reduction(m) else 1),
@@ -3389,7 +3431,9 @@ criterion_tests = [
     dict(
         module_name='BCELoss',
         constructor_args_fn=lambda: (torch.rand(10),),
+        cpp_constructor_args='torch::nn::BCELossOptions().weight(torch::rand(10))',
         input_fn=lambda: torch.rand(15, 10).clamp_(1e-2, 1 - 1e-2),
+        cpp_input_args=['torch::rand({15, 10}).clamp_(1e-2, 1 - 1e-2)'],
         target_fn=lambda: torch.randn(15, 10).gt(0).double(),
         reference_fn=lambda i, t, m: -((t * i.log() + (1 - t) * (1 - i).log()) * get_weight(m)).sum() /
             (i.numel() if get_reduction(m) else 1),
@@ -3406,6 +3450,7 @@ criterion_tests = [
     dict(
         module_name='CrossEntropyLoss',
         constructor_args_fn=lambda: (torch.rand(10),),
+        cpp_constructor_args='torch::nn::CrossEntropyLossOptions().weight(torch::rand(10))',
         input_size=(15, 10),
         cpp_input_args=['torch::randn({15, 10})'],
         target_fn=lambda: torch.Tensor(15).uniform_().mul(10).floor().long(),
@@ -3487,8 +3532,9 @@ criterion_tests = [
     dict(
         module_name='MultiMarginLoss',
         constructor_args=(2,),
-        cpp_constructor_args='torch::nn::MultiMarginLossOptions(2)',
+        cpp_constructor_args='torch::nn::MultiMarginLossOptions().p(2)',
         input_fn=lambda: torch.rand(5, 10).clamp_(1e-2, 1 - 1e-2),
+        cpp_input_args=['torch::rand({5, 10}).clamp_(1e-2, 1 - 1e-2)'],
         target_fn=lambda: torch.rand(5).mul(8).floor().long(),
         reference_fn=lambda i, t, m:
             multimarginloss_reference(i, t, p=2, reduction=get_reduction(m)),
@@ -3499,7 +3545,7 @@ criterion_tests = [
     dict(
         module_name='MultiMarginLoss',
         constructor_args=(1, 0.5),
-        cpp_constructor_args='torch::nn::MultiMarginLossOptions(1, 0.5)',
+        cpp_constructor_args='torch::nn::MultiMarginLossOptions().p(1).margin(0.5)',
         legacy_constructor_args=(1, None, 0.5),
         input_size=(5, 10),
         cpp_input_args=['torch::randn({5, 10})'],
@@ -3513,6 +3559,7 @@ criterion_tests = [
     dict(
         module_name='MultiMarginLoss',
         constructor_args=(1, 1., torch.rand(10)),
+        cpp_constructor_args='torch::nn::MultiMarginLossOptions().p(1).margin(1.).weight(torch::rand(10))',
         legacy_constructor_args=(1, torch.rand(10)),
         input_size=(5, 10),
         cpp_input_args=['torch::randn({5, 10})'],
@@ -3544,6 +3591,7 @@ criterion_tests = [
     dict(
         module_name='CosineEmbeddingLoss',
         input_fn=lambda: (torch.rand(15, 10), torch.rand(15, 10)),
+        cpp_input_args=['torch::rand({15, 10})', 'torch::rand({15, 10})'],
         target_fn=lambda: torch.randn(15).sign(),
         reference_fn=lambda i, t, m:
             cosineembeddingloss_reference(i[0], i[1], t, reduction=get_reduction(m)),
@@ -3552,8 +3600,9 @@ criterion_tests = [
     dict(
         module_name='CosineEmbeddingLoss',
         constructor_args=(0.7,),
-        cpp_constructor_args='torch::nn::CosineEmbeddingLossOptions(0.7)',
+        cpp_constructor_args='torch::nn::CosineEmbeddingLossOptions().margin(0.7)',
         input_fn=lambda: (torch.rand(15, 10), torch.rand(15, 10)),
+        cpp_input_args=['torch::rand({15, 10})', 'torch::rand({15, 10})'],
         target_fn=lambda: torch.randn(15).sign(),
         reference_fn=lambda i, t, m:
             cosineembeddingloss_reference(i[0], i[1], t, margin=0.7, reduction=get_reduction(m)),
@@ -3562,6 +3611,7 @@ criterion_tests = [
     ),
     dict(
         module_name='MarginRankingLoss',
+        # yf225 TODO: search for `input_fn` starting from here, and translate them to cpp_input_args!!
         input_fn=lambda: (torch.randn(50).mul(10), torch.randn(50).mul(10)),
         target_fn=lambda: torch.randn(50).sign(),
         reference_fn=lambda i, t, m:
@@ -3571,7 +3621,7 @@ criterion_tests = [
     dict(
         module_name='MarginRankingLoss',
         constructor_args=(0.5,),
-        cpp_constructor_args='torch::nn::MarginRankingLossOptions(0.5)',
+        cpp_constructor_args='torch::nn::MarginRankingLossOptions().margin(0.5)',
         input_fn=lambda: (torch.randn(50).mul(10), torch.randn(50).mul(10)),
         target_fn=lambda: torch.randn(50).sign(),
         reference_fn=lambda i, t, m:
@@ -3590,6 +3640,7 @@ new_criterion_tests = [
     dict(
         module_name='BCEWithLogitsLoss',
         constructor_args=(torch.rand(10),),
+        cpp_constructor_args='torch::nn::BCEWithLogitsLossOptions().weight(torch::rand(10))'
         input_fn=lambda: torch.rand(15, 10).clamp_(1e-2, 1 - 1e-2),
         target_fn=lambda: torch.randn(15, 10).gt(0).double(),
         desc='weights',
@@ -3597,6 +3648,7 @@ new_criterion_tests = [
     dict(
         module_name='BCEWithLogitsLoss',
         constructor_args=(torch.rand(()),),
+        cpp_constructor_args='torch::nn::BCEWithLogitsLossOptions().weight(torch::rand({}))'
         input_fn=lambda: torch.rand(()).clamp_(1e-2, 1 - 1e-2),
         target_fn=lambda: torch.randn(()).gt(0).double(),
         desc='scalar_weights'
@@ -3615,6 +3667,7 @@ new_criterion_tests = [
     dict(
         module_name='NLLLoss',
         constructor_args_fn=lambda: (torch.rand(3),),
+        cpp_constructor_args='torch::nn::NLLLossOptions().weight(torch::rand(3))',
         input_size=(2, 3, 5, 5),
         cpp_input_args=['torch::randn({2, 3, 5, 5})'],
         target=torch.rand(2, 5, 5).mul(3).floor().long(),
@@ -3626,7 +3679,7 @@ new_criterion_tests = [
     dict(
         module_name='NLLLoss',
         constructor_args=(None, None, 1),
-        cpp_constructor_args='torch::nn::NLLLossOptions(None, None, 1)',
+        cpp_constructor_args='torch::nn::NLLLossOptions().weight().ignore_index(1)',
         input_size=(2, 3, 5, 5),
         cpp_input_args=['torch::randn({2, 3, 5, 5})'],
         target_fn=lambda: torch.rand(2, 5, 5).mul(3).floor().long(),
@@ -3668,6 +3721,7 @@ new_criterion_tests = [
     dict(
         module_name='PoissonNLLLoss',
         constructor_args=(False, False),  # log_input=False, full=False
+        cpp_constructor_args='torch::nn::PoissonNLLLossOptions().log_input(false).full(false)',
         input_fn=lambda: torch.randn(2, 3, 4, 5).abs_().add_(0.001),
         target_fn=lambda: torch.randn(2, 3, 4, 5).floor_().abs_(),
         reference_fn=lambda i, t, _: (i - t.mul((i + 1e-8).log())).mean(),
@@ -3676,6 +3730,7 @@ new_criterion_tests = [
     dict(
         module_name='PoissonNLLLoss',
         constructor_args=(True, True),  # log_input=True, full=True
+        cpp_constructor_args='torch::nn::PoissonNLLLossOptions().log_input(true).full(true)',
         input_size=(2, 3, 4, 5),
         cpp_input_args=['torch::randn({2, 3, 4, 5})'],
         target_fn=lambda: torch.randn(2, 3, 4, 5).floor_().abs_(),
@@ -3686,6 +3741,7 @@ new_criterion_tests = [
     dict(
         module_name='PoissonNLLLoss',
         constructor_args=(False, True),  # log_input=False, full=True
+        cpp_constructor_args='torch::nn::PoissonNLLLossOptions().log_input(false).full(true)',
         input_fn=lambda: torch.randn(2, 3, 4, 5).abs_().add_(0.001),
         target_fn=lambda: torch.randn(2, 3, 4, 5).floor_().abs_(),
         reference_fn=lambda i, t, _:
@@ -3694,7 +3750,6 @@ new_criterion_tests = [
     ),
     dict(
         module_name='L1Loss',
-        cpp_constructor_args='',
         input_size=(),
         target_size=(),
         reference_fn=lambda i, t, _: 1. / i.numel() * (i - t).abs().sum(),
@@ -3732,6 +3787,7 @@ new_criterion_tests = [
     dict(
         module_name='BCELoss',
         constructor_args_fn=lambda: (torch.rand(()),),
+        cpp_constructor_args='torch::nn::BCELossOptions().weight(torch::rand({}))',
         input_fn=lambda: torch.rand(()).clamp_(1e-2, 1 - 1e-2),
         target_fn=lambda: torch.rand(()).gt(0).double(),
         reference_fn=lambda i, t, m: -((t * i.log() + (1 - t) * (1 - i).log()) * get_weight(m)).sum() /
@@ -3743,7 +3799,7 @@ new_criterion_tests = [
     dict(
         module_name='HingeEmbeddingLoss',
         constructor_args=(0.5,),
-        cpp_constructor_args='torch::nn::HingeEmbeddingLossOptions(0.5)',
+        cpp_constructor_args='torch::nn::HingeEmbeddingLossOptions().margin(0.5)',
         input_size=(),
         target_fn=lambda: torch.randn(()).gt(0).double().mul_(2).sub(1),
         desc='scalar_margin',
@@ -3761,6 +3817,7 @@ new_criterion_tests = [
     dict(
         module_name='MultiLabelSoftMarginLoss',
         constructor_args=(torch.rand(10),),
+        cpp_constructor_args='torch::nn::MultiLabelSoftMarginLossOptions().weight(torch::rand(10))',
         input_fn=lambda: torch.randn(5, 10),
         target_fn=lambda: torch.rand(5, 10).mul(2).floor(),
         reference_fn=lambda i, t, m: -((t * i.sigmoid().log() + (1 - t) * (-i).sigmoid().log()) * get_weight(m)).sum() /
@@ -3772,6 +3829,7 @@ new_criterion_tests = [
     dict(
         module_name='CTCLoss',
         constructor_args=(14,),  # blank=14
+        cpp_constructor_args='torch::nn::CTCLossOptions().blank(14)',
         extra_args=([50, 50, 50], [30, 25, 20]),  # input_lengths, target_lengths
         input_fn=lambda: torch.randn(50, 3, 15).log_softmax(2),
         target_fn=lambda: torch.randint(0, 14, (3, 30), dtype=torch.long),
@@ -3787,6 +3845,7 @@ new_criterion_tests = [
     #     module_name='CTCLoss',
     #     desc='1d_target',
     #     constructor_args=(14,),  # blank=14
+    #     cpp_constructor_args='torch::nn::CTCLossOptions().blank(14)',
     #     extra_args=([50, 50, 50], [30, 25, 20]),  # input_lengths, target_lengths
     #     input_fn=lambda: torch.randn(50, 3, 15).log_softmax(2),
     #     target_fn=lambda: torch.randint(0, 14, (3, 30), dtype=torch.long),
@@ -3800,6 +3859,7 @@ new_criterion_tests = [
         module_name='CTCLoss',
         desc='2d_int_target',
         constructor_args=(0,),  # blank=0
+        cpp_constructor_args='torch::nn::CTCLossOptions().blank(0)',
         extra_args=([50, 50, 50], [30, 25, 20]),  # input_lengths, target_lengths
         input_fn=lambda: torch.randn(50, 3, 15).log_softmax(2),
         target_fn=lambda: torch.randint(1, 15, (3, 30), dtype=torch.int),
@@ -3814,6 +3874,7 @@ new_criterion_tests = [
         module_name='CTCLoss',
         desc='2d_lengths_tensors',
         constructor_args=(0,),  # blank=0
+        cpp_constructor_args='torch::nn::CTCLossOptions().blank(0)',
         extra_args=(torch.tensor([50, 50, 50]), torch.tensor([30, 25, 20])),  # input_lengths, target_lengths
         input_fn=lambda: torch.randn(50, 3, 15).log_softmax(2),
         target_fn=lambda: torch.randint(1, 15, (3, 30), dtype=torch.int),

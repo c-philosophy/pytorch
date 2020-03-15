@@ -33,6 +33,16 @@ void write_ivalue_to_file(const torch::IValue& ivalue, const std::string& file_p
   fout.write(bytes.data(), bytes.size());
   fout.close();
 }
+
+// Generates rand tensor with non-equal values. This ensures that duplicate
+// values won't be causing test failure for modules like MaxPooling.
+// size should be small, otherwise randperm fails / long overflows.
+torch::Tensor _rand_tensor_non_equal(torch::IntArrayRef size):
+    int64_t total = 1;
+    for (int64_t elem : size) {
+      total *= elem;
+    }
+    return torch::randperm(total).view(size).double();
 """
 
 TORCH_NN_MODULE_TEST_FORWARD_BACKWARD = Template("""\n
